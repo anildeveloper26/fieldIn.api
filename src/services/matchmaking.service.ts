@@ -36,7 +36,7 @@ export async function listSquads() {
 
 export async function listSolo() {
   const result = await pool.query(
-    `SELECT sa.id, sa.user_id, u.name AS user_name, u.trust_score, u.punctuality_rate,
+    `SELECT sa.id, sa.user_id, u.name AS user_name, u.trust_score, u.punctuality_rate, u.sport_preferences,
             sa.sport_type, sa.available_date, sa.available_time, sa.max_budget, sa.notes,
             sa.is_active, sa.created_at
      FROM solo_availability sa
@@ -78,7 +78,7 @@ export async function postSoloAvailability(input: PostSoloInput) {
   );
 
   const solo = await pool.query(
-    `SELECT sa.id, sa.user_id, u.name AS user_name, u.trust_score, u.punctuality_rate,
+    `SELECT sa.id, sa.user_id, u.name AS user_name, u.trust_score, u.punctuality_rate, u.sport_preferences,
             sa.sport_type, sa.available_date, sa.available_time, sa.max_budget, sa.notes,
             sa.is_active, sa.created_at
      FROM solo_availability sa
@@ -180,6 +180,7 @@ function mapSoloRow(row: any) {
     id: row.id,
     userId: row.user_id,
     userName: row.user_name,
+    sportPreferences: row.sport_preferences ?? [],
     trustScore: Number(row.trust_score),
     punctualityRate: Number(row.punctuality_rate),
     sportType: row.sport_type,
