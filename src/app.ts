@@ -16,9 +16,11 @@ export const app = express();
 app.use(cors({ origin: env.frontendOrigin, credentials: true }));
 app.use(express.json());
 
-// Behind Railway/Render's proxy, trust the first X-Forwarded-For hop so the
-// rate limiter keys on the real client IP rather than the load balancer's.
-app.set("trust proxy", 1);
+// Requests arrive browser -> Vercel (Next.js /api proxy) -> Render's load
+// balancer -> here, so trust two X-Forwarded-For hops; otherwise every user
+// would share Vercel's IP and one rate-limit bucket. Override with
+// TRUST_PROXY_HOPS if the deployment topology changes.
+app.set("trust proxy", Number(process.env.TRUST_PROXY_HOPS ?? 2));
 
 // Global ceiling for the whole API, plus a much tighter one on credential
 // endpoints to slow down password guessing.
