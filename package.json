@@ -2,11 +2,12 @@
   "name": "fieldin-backend",
   "version": "1.0.0",
   "private": true,
-  "main": "dist/src/server.js",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc -p tsconfig.json",
-    "start": "node dist/src/server.js",
+    "postinstall": "npm run build",
+    "start": "node dist/server.js",
     "seed": "tsx db/run-seed.ts"
   },
   "dependencies": {
